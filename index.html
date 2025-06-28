@@ -1,0 +1,27 @@
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduView</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="photo"></div>
+    <h1 id="studentName">Pedro</h1>
+    <p>ID: <span id="studentID">00001</span></p>
+    <p>Média: <span id="studentAverage">8.5</span></p>
+    <div>
+      <h3>Notas</h3>
+      <ul id="gradesList"></ul>
+    </div>
+    <div>
+      <h3>Anotações</h3>
+      <div id="notes" contenteditable="true" data-placeholder="Digite sobre o aluno"></div>
+    </div>
+    <button id="prev">Anterior</button>
+    <button id="next">Próximo</button>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+body {
+  font-family: sans-serif;
+  background-color: #E7F6FF;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+}
+
+/* Hexágono com imagem de perfil */
+.photo {
+  width: 100px;
+  height: 100px;
+  background-image: url('img/MHA\ Matrix.jpg');
+  background-size: cover;
+  background-position: center;
+  clip-path: polygon(
+    25% 6.7%, 75% 6.7%, 
+    100% 50%, 75% 93.3%, 
+    25% 93.3%, 0% 50%
+  );
+  margin: 0 auto 15px auto;
+}
+
+/* Título do aluno */
+h1#studentName {
+  font-size: 24px;
+  margin: 10px 0 5px;
+}
+
+/* ID e Média */
+p {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #444;
+}
+
+p span {
+  font-weight: bold;
+}
+
+/* Notas */
+#gradesList {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 15px;
+  text-align: left;
+  max-width: 250px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#gradesList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.grade-input {
+  width: 60px;
+  padding: 4px;
+  font-size: 14px;
+}
+
+
+#gradesList li:last-child {
+  border-bottom: none;
+}
+
+#gradesList li {
+  padding: 6px 8px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Anotações editáveis */
+#notes {
+  background: #f9f9f9;
+  border: 1px dashed #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  min-height: 60px;
+  cursor: text;
+  transition: background 0.3s, border 0.3s;
+  text-align: left;
+  max-width: 300px;
+  margin: 0 auto 20px;
+  outline: none;
+  white-space: pre-wrap;
+}
+
+#notes:focus {
+  background: #fff;
+  border: 1px solid #007bff;
+}
+
+#notes:empty:before {
+  content: attr(data-placeholder);
+  color: #999;
+  pointer-events: none;
+}
+
+
+/* Botões */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  margin: 0 10px;
+  font-size: 16px;
+}
+
+button:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Container dos botões centralizado */
+.container > button {
+  display: inline-block;
+}
+
+/* Responsivo */
+@media (max-width: 500px) {
+  .container {
+    max-width: 95%;
+    padding: 15px;
+  }
+  button {
+    padding: 8px 12px;
+    font-size: 14px;
+    margin: 5px;
+  }
+}
