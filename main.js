@@ -4,25 +4,28 @@ const listaDeAlunos = [
     nome: 'Aluno 1',
     matricula: '0001',
     media: 8.5,
-    notas: {
-      'Matemática': 9.0,
-      'Português': 8.0,
-      'História': 8.5
-    },
-    anotacao: ''
+    notas: { 'Matemática': 9, 'Português': 8, 'História': 8.5 },
+    anotacao: '',
+    classeFoto: 'Aluno1' 
   },
   {
-    nome: 'Maria Souza',
+    nome: 'Aluno 2',
     matricula: '0002',
     media: 7.8,
-    notas: {
-      'Matemática': 7.5,
-      'Português': 8.0,
-      'História': 8.0
-    },
-    anotacao: ''
+    notas: { 'Matemática': 7.5, 'Português': 8, 'História': 8 },
+    anotacao: '',
+    classeFoto: 'Aluno2' 
+  },
+  {
+    nome: 'Aluno 3',
+    matricula: '0003',
+    media: 9.1,
+    notas: { 'Matemática': 9.5, 'Português': 8.8, 'História': 9 },
+    anotacao: '',
+    classeFoto: 'Aluno3' 
   },
 ];
+
 
 let indiceAtual = 0;
 
@@ -32,6 +35,7 @@ const matriculaAlunoElemento = document.getElementById('studentID');
 const mediaAlunoElemento = document.getElementById('studentAverage');
 const listaNotasElemento = document.getElementById('gradesList');
 const anotacoesElemento = document.getElementById('notes');
+const fotoElemento = document.getElementById('photo'); // PEGAR O HEXÁGONO
 
 // Função para atualizar a média automaticamente
 function atualizarMedia(aluno) {
@@ -54,6 +58,11 @@ function renderizarAluno(indice) {
     mediaAlunoElemento.textContent = aluno.media;
     listaNotasElemento.innerHTML = '';
 
+    // Trocar foto dinamicamente via classe
+    fotoElemento.className = 'photo'; // Resetar classe
+    fotoElemento.classList.add(aluno.classeFoto); // Adicionar classe específica do aluno
+
+    // Renderizar notas editáveis
     for (let materia in aluno.notas) {
         const itemLista = document.createElement('li');
         const rotuloMateria = document.createElement('span');
@@ -78,6 +87,7 @@ function renderizarAluno(indice) {
         listaNotasElemento.appendChild(itemLista);
     }
 
+    // Atualiza anotação
     anotacoesElemento.textContent = aluno.anotacao || '';
 }
 
@@ -98,7 +108,7 @@ anotacoesElemento.addEventListener('blur', () => {
 anotacoesElemento.addEventListener('keydown', (evento) => {
     if (evento.key === 'Enter') {
         evento.preventDefault();
-        anotacoesElemento.blur(); // sai do modo edição e salva
+        anotacoesElemento.blur(); // Sai do modo edição e salva
     }
 });
 
