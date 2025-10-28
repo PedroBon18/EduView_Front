@@ -1,6 +1,10 @@
+/* Importa a fonte "tech" */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
 body {
-  font-family: sans-serif;
-  background-color: #E7F6FF;
+  font-family: 'Share Tech Mono', monospace; /* Fonte nova */
+  background-color: #0a192f; /* Fundo escuro */
+  color: #a8b2d1; /* Cor de texto clara */
   margin: 0;
   padding: 0;
   display: flex;
@@ -10,20 +14,49 @@ body {
 }
 
 .container {
-  background: white;
-  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr; /* Layout de 3 colunas */
+  gap: 20px;
+  background: #112240; /* Fundo do painel */
+  border: 2px solid #64ffda; /* Borda "glowing" ciano */
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  max-width: 400px;
+  padding: 20px;
   width: 90%;
-  text-align: center;
-  position: relative;
+  max-width: 1000px;
+  box-shadow: 0 0 20px rgba(100, 255, 218, 0.3); /* Sombra "glowing" */
 }
 
-/* Hexágono base */
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Painel Central --- */
+.panel-center {
+  flex-direction: row; /* Alinha botões e foto horizontalmente */
+  justify-content: center;
+  align-items: center;
+  border-left: 2px solid #1e3c72; /* Divisórias */
+  border-right: 2px solid #1e3c72;
+  padding: 0 15px;
+}
+
+.photo-frame {
+  border: 3px solid #64ffda; /* Borda do hexágono */
+  /* O clip-path cria o hexágono */
+  clip-path: polygon(
+    25% 6.7%, 75% 6.7%, 
+    100% 50%, 75% 93.3%, 
+    25% 93.3%, 0% 50%
+  );
+  padding: 5px; /* Espaçamento para a borda */
+  margin: 0 15px;
+}
+
 .photo {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   background-size: cover;
   background-position: center;
   clip-path: polygon(
@@ -31,135 +64,206 @@ body {
     100% 50%, 75% 93.3%, 
     25% 93.3%, 0% 50%
   );
-  margin: 0 auto 15px auto;
-  background-color: #ddd;
 }
 
-/* Imagens específicas de cada aluno */
-.photo.Aluno1 {
-  background-image: url('img/Pedro.jpg');
-}
+/* Imagens (inalterado) */
+.photo.Aluno1 { background-image: url('img/Pedro.jpg'); }
+.photo.Aluno2 { background-image: url('img/aranha.jpg'); }
+.photo.Aluno3 { background-image: url('img/avatar_steam.jpg'); }
 
-.photo.Aluno2 {
-  background-image: url('img/aranha.jpg');
-}
-
-.photo.Aluno3 {
-  background-image: url('img/avatar_steam.jpg');
-}
-
-/* Título do aluno */
-h1#studentName {
+.nav-button {
+  background: none;
+  border: 2px solid #64ffda;
+  color: #64ffda;
   font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s ease;
+}
+.nav-button:hover {
+  background: rgba(100, 255, 218, 0.2);
+  transform: scale(1.1);
+}
+
+/* --- Painel Direito --- */
+.panel-right {
+  text-align: center;
+}
+
+h1#studentName {
+  font-size: 28px;
+  color: #ccd6f6;
   margin: 10px 0 5px;
 }
 
-/* ID e Média */
-p {
-  font-size: 16px;
-  margin: 5px 0;
-  color: #444;
-}
-
-p span {
+.student-id-large {
+  font-size: 72px; /* ID gigante, como o "03" da imagem */
   font-weight: bold;
+  color: #64ffda; /* Cor destaque */
+  margin: 10px 0;
 }
 
-/* Notas */
-#gradesList {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 15px;
-  text-align: left;
-  max-width: 250px;
-  margin-left: auto;
-  margin-right: auto;
+/* Barra de Média */
+.average-bar-container {
+  width: 90%;
+  background: #0a192f;
+  border: 1px solid #a8b2d1;
+  border-radius: 5px;
+  height: 25px;
+  position: relative;
+  margin: 10px auto;
+  overflow: hidden; /* Garante que a barra interna fique contida */
 }
-
-#gradesList li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 10px;
-  border-bottom: 1px solid #eee;
+.average-bar {
+  height: 100%;
+  /* Gradiente Verde -> Amarelo -> Vermelho */
+  background: linear-gradient(90deg, #ff4d4d 0%, #f9ff4d 50%, #4dff4d 100%);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  width: 0%; /* Será definido pelo JS */
 }
-
-.grade-input {
-  width: 60px;
-  padding: 4px;
+#studentAverage {
+  position: absolute;
+  left: 50%; /* Centraliza o texto da média */
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
   font-size: 14px;
+  /* Faz o texto inverter a cor do fundo */
+  mix-blend-mode: difference; 
 }
 
-
-#gradesList li:last-child {
-  border-bottom: none;
-}
-
-#gradesList li {
-  padding: 6px 8px;
-  border-bottom: 1px solid #eee;
-}
-
-/* Anotações editáveis */
-#notes {
-  background: #f9f9f9;
-  border: 1px dashed #ccc;
+/* Anotações, Metas e Feedback (Tema Escuro) */
+/* ATUALIZADO: Usando classe .editable-box em vez de #notes */
+.editable-box {
+  background: #0e2038;
+  border: 1px dashed #495c80;
   padding: 10px;
   border-radius: 6px;
   min-height: 60px;
   cursor: text;
   transition: background 0.3s, border 0.3s;
   text-align: left;
-  max-width: 300px;
+  width: 90%;
   margin: 0 auto 20px;
   outline: none;
   white-space: pre-wrap;
+  color: #a8b2d1;
+}
+
+.editable-box:focus {
+  background: #112240;
+  border: 1px solid #64ffda;
+}
+
+.editable-box:empty:before {
+  content: attr(data-placeholder);
+  color: #5a73a8;
+  pointer-events: none;
+}
+
+/* NOVO: Estilo para o Bloco de Alerta */
+#studentAlert {
+  width: 90%;
+  padding: 10px;
+  margin: 0 auto 20px;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: bold;
+  
+  /* Estilo padrão (oculto) */
+  display: none; 
+  
+  /* Estilo de Alerta (Amarelo/Laranja) */
+  border: 1px solid #f9ff4d; 
+  color: #f9ff4d;
+  background: rgba(249, 255, 77, 0.1);
+}
+
+/* Lista de notas (agora visível e estilizada para edição) */
+#gradesList {
+  /* display: none; */ /* LINHA ORIGINAL COMENTADA/REMOVIDA */
+  list-style: none; 
+  padding: 0;
+  margin-top: 20px;
+  width: 90%;
+}
+
+#gradesList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.grade-input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #495c80;
+    background: #0e2038;
+    color: #a8b2d1;
+    border-radius: 4px;
+    text-align: center;
+}
+
+
+/* Anotações (Tema Escuro) */
+#notes {
+  background: #0e2038;
+  border: 1px dashed #495c80;
+  padding: 10px;
+  border-radius: 6px;
+  min-height: 60px;
+  cursor: text;
+  transition: background 0.3s, border 0.3s;
+  text-align: left;
+  width: 90%;
+  margin: 0 auto 20px;
+  outline: none;
+  white-space: pre-wrap;
+  color: #a8b2d1;
 }
 
 #notes:focus {
-  background: #fff;
-  border: 1px solid #007bff;
+  background: #112240;
+  border: 1px solid #64ffda;
 }
 
 #notes:empty:before {
   content: attr(data-placeholder);
-  color: #999;
+  color: #5a73a8;
   pointer-events: none;
 }
 
+/*Estilos para o controle de Faltas */
+.frequency-controls {
+  width: 90%;
+  margin: 15px auto 0;
+  text-align: center;
+}
 
-/* Botões */
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  background: #007bff;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-  margin: 0 10px;
+.frequency-controls h3 {
+  margin-top: 5px; /* Ajuste para separar das anotações */
+}
+
+.frequency-controls label {
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+/* Reutiliza o estilo do .grade-input para o input de faltas */
+#studentAbsencesInput {
+  width: 70px;
+  padding: 5px;
+  border: 1px solid #495c80;
+  background: #0e2038;
+  color: #a8b2d1;
+  border-radius: 4px;
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace; /* Garante a fonte */
   font-size: 16px;
-}
-
-button:hover {
-  background: #0056b3;
-  transform: scale(1.05);
-}
-
-/* Container dos botões centralizado */
-.container > button {
-  display: inline-block;
-}
-
-/* Responsivo */
-@media (max-width: 500px) {
-  .container {
-    max-width: 95%;
-    padding: 15px;
-  }
-  button {
-    padding: 8px 12px;
-    font-size: 14px;
-    margin: 5px;
-  }
 }
