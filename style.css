@@ -36,13 +36,13 @@ body {
 
 /* --- Painel Central --- */
 .panel-center {
-  flex-direction: column; /* Empilha verticalmente (Gráfico, Nav-Row, Inputs) */
-  justify-content: flex-start; /* Alinha os itens ao topo do painel */
+  flex-direction: column; 
+  justify-content: flex-start; 
   align-items: center;
-  border-left: 2px solid #1e3c72; /* Divisórias */
+  border-left: 2px solid #1e3c72; 
   border-right: 2px solid #1e3c72;
   padding: 0 15px;
-  gap: 15px; /* Adiciona espaçamento entre os elementos empilhados */
+  gap: 15px; 
 }
 
 /* NOVO: Estilo para o Contêiner do Gráfico de Linha na Coluna Central */
@@ -89,6 +89,21 @@ body {
 .photo.Aluno1 { background-image: url('img/Pedro.jpg'); }
 .photo.Aluno2 { background-image: url('img/aranha.jpg'); }
 .photo.Aluno3 { background-image: url('img/avatar_steam.jpg'); }
+
+/* NOVO: Estilização do Rank */
+#studentRank {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff; /* Texto branco */
+    background: #64ffda; /* Fundo ciano (cor de destaque) */
+    padding: 8px 20px;
+    border-radius: 4px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Sombra para destacar Rank */
+    box-shadow: 0 0 10px rgba(100, 255, 218, 0.5); /* Efeito neon */
+    margin-top: 15px; /* Espaço para separar do bloco de notas históricas */
+    min-width: 120px; /* Garante que o bloco não seja muito pequeno */
+    text-align: center;
+}
 
 .nav-button {
   background: none;

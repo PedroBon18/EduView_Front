@@ -17,8 +17,8 @@ const listaDeAlunos = [
     },
     frequencia: { faltas: 10, totalAulas: 200 },
     anotacao: '',
-    metas: '',
-    feedback: '',
+    metas: 'Melhorar a nota de Inglês para 8.0.',
+    feedback: 'Conversado com o aluno em 10/10 sobre o progresso.',
     alerta: '', 
     classeFoto: 'Aluno1',
     historicoMedia: [8.0, 7.8, 8.5] // NOVO
@@ -56,12 +56,12 @@ const listaDeAlunos = [
       'Ciências': 9.8
     },
     frequencia: { faltas: 2, totalAulas: 200 },
-    anotacao: '',
-    metas: '',
-    feedback: '.',
+    anotacao: 'Excelente participação.',
+    metas: 'Manter a média acima de 9.0.',
+    feedback: 'Parabenizado pelo desempenho em Ciências.',
     alerta: '',
     classeFoto: 'Aluno3',
-    historicoMedia: [8.5, 9.2, 9.1]
+    historicoMedia: [8.5, 9.2, 9.1] // NOVO
   },
 ];
 
@@ -77,7 +77,7 @@ const anotacoesElemento = document.getElementById('notes');
 const fotoElemento = document.getElementById('photo');
 const mediaBarElemento = document.getElementById('studentAverageBar');
 const faltasInputElemento = document.getElementById('studentAbsencesInput');
-// NOVOS Seletores
+
 const metasElemento = document.getElementById('studentGoals');
 const feedbackElemento = document.getElementById('studentFeedback');
 const alertaElemento = document.getElementById('studentAlert');
@@ -85,7 +85,8 @@ const alertaElemento = document.getElementById('studentAlert');
 const gradeTrim1Input = document.getElementById('gradeTrim1');
 const gradeTrim2Input = document.getElementById('gradeTrim2');
 const gradeTrim3Input = document.getElementById('gradeTrim3');
-
+// NOVO: Seletor para o Rank
+const rankElemento = document.getElementById('studentRank');
 
 // Variáveis globais para os Gráficos
 let radarChart;
@@ -95,7 +96,18 @@ const radarCtx = document.getElementById('radarChart')?.getContext('2d');
 const doughnutCtx = document.getElementById('doughnutChart')?.getContext('2d');
 const lineCtx = document.getElementById('lineChart')?.getContext('2d'); // NOVO
 
-// Configurações dos Gráficos (radarConfig e doughnutConfig)
+// NOVO: Função para calcular e atualizar o ranking de todos os alunos
+function calcularRanking() {
+    // 1. Clonar a lista e ordenar por média (decrescente)
+    const alunosOrdenados = [...listaDeAlunos].sort((a, b) => b.media - a.media);
+    
+    // 2. Atribuir o rank
+    alunosOrdenados.forEach((aluno, index) => {
+        aluno.rank = index + 1;
+    });
+}
+
+// Configurações dos Gráficos 
 const radarConfig = {
     type: 'radar',
     data: {
@@ -292,11 +304,19 @@ function atualizarMedia(aluno) {
     const mediaPercentual = (mediaCalculada * 10); 
     mediaBarElemento.style.width = mediaPercentual + '%';
     
+    // Garante que o ranking seja recalculado se a média principal mudar
+    calcularRanking(); 
+    rankElemento.textContent = `Rank ${aluno.rank}`;
+    
     atualizarGraficoRadar(aluno.notas);
 }
 
 // Função para renderizar o aluno atual
 function renderizarAluno(indice) {
+    
+    // Antes de tudo, garante que o ranking está atualizado
+    calcularRanking(); 
+    
     const aluno = listaDeAlunos[indice];
     
     // O nome é populado aqui (e agora é editável)
@@ -304,15 +324,18 @@ function renderizarAluno(indice) {
     matriculaAlunoElemento.textContent = aluno.matricula;
     listaNotasElemento.innerHTML = ''; 
 
+    // NOVO: Exibe o Rank
+    rankElemento.textContent = `Rank ${aluno.rank}`;
+
     fotoElemento.className = 'photo'; 
     fotoElemento.classList.add(aluno.classeFoto);
 
     // Atualiza Gráficos
     atualizarGraficoRadar(aluno.notas); 
     atualizarGraficoRosca(aluno.frequencia);
-    atualizarGraficoLinha(aluno.historicoMedia); // ATUALIZADO
+    atualizarGraficoLinha(aluno.historicoMedia); 
 
-    // NOVO: Popula os inputs de Trimestre
+    // Popula os inputs de Trimestre
     const [t1, t2, t3] = aluno.historicoMedia;
     // O operador ternário garante que o campo fique vazio se o valor for undefined
     gradeTrim1Input.value = t1 !== undefined ? t1 : '';
@@ -366,7 +389,7 @@ function renderizarAluno(indice) {
 
 // --- Event Listeners para Conteúdo Editável ---
 
-// NOVO: Função para salvar e atualizar a média de um trimestre
+// Função para salvar e atualizar a média de um trimestre
 function handleHistoricalGradeChange(inputElement, trimestreIndex) {
     const aluno = listaDeAlunos[indiceAtual];
     let novoValor = parseFloat(inputElement.value);
@@ -390,7 +413,7 @@ function handleHistoricalGradeChange(inputElement, trimestreIndex) {
     atualizarGraficoLinha(aluno.historicoMedia);
 }
 
-// NOVO: Adiciona Event Listeners aos inputs de Trimestre
+// Adiciona Event Listeners aos inputs de Trimestre
 gradeTrim1Input.addEventListener('change', () => handleHistoricalGradeChange(gradeTrim1Input, 0));
 gradeTrim2Input.addEventListener('change', () => handleHistoricalGradeChange(gradeTrim2Input, 1));
 gradeTrim3Input.addEventListener('change', () => handleHistoricalGradeChange(gradeTrim3Input, 2));
@@ -519,5 +542,6 @@ faltasInputElemento.addEventListener('change', () => {
 
 
 // Inicializa o Chart.js e exibe o primeiro aluno
+calcularRanking(); // Calcula o ranking na inicialização
 inicializarGraficos();
 renderizarAluno(indiceAtual);
