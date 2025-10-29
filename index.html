@@ -27,12 +27,28 @@
 
       </div>
 
+      
     <div class="panel panel-center">
-      <button id="prev" class="nav-button">&lt;</button>
-      <div class="photo-frame">
-        <div class="photo" id="photo"></div>
+      <div class="chart-placeholder line-chart-container">
+        <canvas id="lineChart"></canvas>
       </div>
-      <button id="next" class="nav-button">&gt;</button>
+      
+      <div class="nav-row">
+        <button id="prev" class="nav-button">&lt;</button>
+        <div class="photo-frame">
+          <div class="photo" id="photo"></div>
+        </div>
+        <button id="next" class="nav-button">&gt;</button>
+      </div>
+
+      <div class="historical-grades-input">
+        <h4>Notas por Trimestre</h4>
+        <div class="grades-row">
+          <label>1º Trim.: <input type="number" id="gradeTrim1" min="0" max="10" step="0.1" class="historical-input"></label>
+          <label>2º Trim.: <input type="number" id="gradeTrim2" min="0" max="10" step="0.1" class="historical-input"></label>
+          <label>3º Trim.: <input type="number" id="gradeTrim3" min="0" max="10" step="0.1" class="historical-input"></label>
+        </div>
+      </div>
     </div>
 
     <div class="panel panel-right">

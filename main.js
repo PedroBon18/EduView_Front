@@ -1,4 +1,7 @@
-// Lista de alunos (REFATORADA para incluir Metas, Feedback e Alertas)
+// NOVO: Rótulos globais para o histórico (Três períodos)
+const periodos = ['1º Trim.', '2º Trim.', '3º Trim.']; 
+
+// Lista de alunos (ATUALIZADA com historicoMedia)
 const listaDeAlunos = [
   {
     nome: 'Aluno 1',
@@ -17,12 +20,13 @@ const listaDeAlunos = [
     metas: '',
     feedback: '',
     alerta: '', 
-    classeFoto: 'Aluno1' 
+    classeFoto: 'Aluno1',
+    historicoMedia: [8.0, 7.8, 8.5] // NOVO
   },
   {
     nome: 'Aluno 2',
     matricula: '0002',
-    media: 7.8,
+    media: 7.37, 
     notas: { 
       'Matemática': 7.5, 
       'Português': 8, 
@@ -32,11 +36,12 @@ const listaDeAlunos = [
       'Ciências': 7.3
     },
     frequencia: { faltas: 24, totalAulas: 200 },
-    anotacao: '',
-    metas: '',
-    feedback: '',
+    anotacao: 'Parece desatento nas aulas de História.',
+    metas: 'Entregar o trabalho de História pendente.',
+    feedback: 'Reunião com responsáveis agendada para 15/11.',
     alerta: 'alto numero de faltas!', 
-    classeFoto: 'Aluno2' 
+    classeFoto: 'Aluno2',
+    historicoMedia: [9.0, 7.5, 7.37] // NOVO
   },
   {
     nome: 'Aluno 3',
@@ -53,9 +58,10 @@ const listaDeAlunos = [
     frequencia: { faltas: 2, totalAulas: 200 },
     anotacao: '',
     metas: '',
-    feedback: '',
+    feedback: '.',
     alerta: '',
-    classeFoto: 'Aluno3' 
+    classeFoto: 'Aluno3',
+    historicoMedia: [8.5, 9.2, 9.1]
   },
 ];
 
@@ -71,18 +77,25 @@ const anotacoesElemento = document.getElementById('notes');
 const fotoElemento = document.getElementById('photo');
 const mediaBarElemento = document.getElementById('studentAverageBar');
 const faltasInputElemento = document.getElementById('studentAbsencesInput');
+// NOVOS Seletores
 const metasElemento = document.getElementById('studentGoals');
 const feedbackElemento = document.getElementById('studentFeedback');
 const alertaElemento = document.getElementById('studentAlert');
+// Seletores de input de trimestre
+const gradeTrim1Input = document.getElementById('gradeTrim1');
+const gradeTrim2Input = document.getElementById('gradeTrim2');
+const gradeTrim3Input = document.getElementById('gradeTrim3');
+
 
 // Variáveis globais para os Gráficos
 let radarChart;
-let doughnutChart; 
+let doughnutChart;
+let lineChart; 
 const radarCtx = document.getElementById('radarChart')?.getContext('2d');
 const doughnutCtx = document.getElementById('doughnutChart')?.getContext('2d');
+const lineCtx = document.getElementById('lineChart')?.getContext('2d'); // NOVO
 
 // Configurações dos Gráficos (radarConfig e doughnutConfig)
-// ... (O código das configurações dos gráficos permanece o mesmo) ...
 const radarConfig = {
     type: 'radar',
     data: {
@@ -162,14 +175,72 @@ const doughnutConfig = {
     }
 };
 
+// Configurações base do Line Chart
+const lineConfig = {
+    type: 'line',
+    data: {
+        labels: periodos,
+        datasets: [{
+            label: 'Média Geral',
+            data: [], // Será preenchido na renderização
+            borderColor: '#64ffda', // Ciano
+            backgroundColor: 'rgba(100, 255, 218, 0.1)',
+            borderWidth: 2,
+            tension: 0.4, // Suaviza a linha
+            pointRadius: 6, // Destaca os pontos
+            pointBackgroundColor: '#fff',
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            title: {
+                display: true,
+                text: 'Evolução da Média Geral',
+                color: '#ccd6f6',
+                font: { size: 16 }
+            }
+        },
+        scales: {
+            y: {
+                min: 0,
+                max: 10,
+                ticks: {
+                    color: '#a8b2d1',
+                    stepSize: 2
+                },
+                grid: {
+                    color: '#1e3c72'
+                }
+            },
+            x: {
+                ticks: {
+                    color: '#a8b2d1'
+                },
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+};
 
-// Função para inicializar o Chart.js (Sem alterações)
+
+// Função para inicializar o Chart.js (AGORA INCLUI GRÁFICO DE LINHA)
 function inicializarGraficos() {
     if (radarCtx) {
         radarChart = new Chart(radarCtx, radarConfig);
     }
     if (doughnutCtx) { 
         doughnutChart = new Chart(doughnutCtx, doughnutConfig);
+    }
+    if (lineCtx) { // Inicializa o Gráfico de Linha
+        lineChart = new Chart(lineCtx, lineConfig);
     }
 }
 
@@ -194,6 +265,14 @@ function atualizarGraficoRosca(frequencia) {
         const percPresente = 100 - percFaltas;
         doughnutChart.data.datasets[0].data = [percPresente.toFixed(2), percFaltas.toFixed(2)];
         doughnutChart.update();
+    }
+}
+
+// Função para atualizar o Gráfico de Linha
+function atualizarGraficoLinha(historicoMedia) {
+    if (lineChart) {
+        lineChart.data.datasets[0].data = historicoMedia;
+        lineChart.update();
     }
 }
 
@@ -231,7 +310,15 @@ function renderizarAluno(indice) {
     // Atualiza Gráficos
     atualizarGraficoRadar(aluno.notas); 
     atualizarGraficoRosca(aluno.frequencia);
+    atualizarGraficoLinha(aluno.historicoMedia); // ATUALIZADO
 
+    // NOVO: Popula os inputs de Trimestre
+    const [t1, t2, t3] = aluno.historicoMedia;
+    // O operador ternário garante que o campo fique vazio se o valor for undefined
+    gradeTrim1Input.value = t1 !== undefined ? t1 : '';
+    gradeTrim2Input.value = t2 !== undefined ? t2 : '';
+    gradeTrim3Input.value = t3 !== undefined ? t3 : '';
+    
     // Atualiza input de faltas
     faltasInputElemento.value = aluno.frequencia.faltas;
     faltasInputElemento.max = aluno.frequencia.totalAulas;
@@ -265,43 +352,67 @@ function renderizarAluno(indice) {
         listaNotasElemento.appendChild(itemLista);
     }
 
-    // ATUALIZADO: Popula os novos campos (Anotações, Metas, Feedback, Alerta)
+    // Popula os novos campos (Anotações, Metas, Feedback, Alerta)
     anotacoesElemento.textContent = aluno.anotacao || '';
     metasElemento.textContent = aluno.metas || '';
     feedbackElemento.textContent = aluno.feedback || '';
     
-    // ATUALIZADO: Popula o Alerta
+    // Popula o Alerta
     alertaElemento.textContent = aluno.alerta || ''; 
-    // OBS: O estilo de "display: none" é agora controlado pelo CSS usando a classe alert-box e o :empty.
-    
-    // Controla a exibição do Alerta
-    // Event Listeners para Alerta
-if (!alertaElemento.textContent.trim()) {
-    alertaElemento.textContent = '';
-}
-alertaElemento.addEventListener('blur', () => {
-    // Salva o texto do alerta
-    if (!alertaElemento.textContent.trim()) {
-        alertaElemento.textContent = '';
-    }
-    listaDeAlunos[indiceAtual].alerta = alertaElemento.textContent.trim();
-    
-    // Quando o usuário sai do campo, forçamos a re-renderização
-    // Isso garante que o CSS .alert-box:empty:not(:focus) seja ativado/desativado corretamente.
-    renderizarAluno(indiceAtual); 
-});
-alertaElemento.addEventListener('keydown', (evento) => {
-    if (evento.key === 'Enter') {
-        evento.preventDefault();
-        alertaElemento.blur(); // Salva e sai do modo edição
-    }
-});
-    
+
     // Calcula e exibe a média e a barra
     atualizarMedia(aluno); 
 }
 
 // --- Event Listeners para Conteúdo Editável ---
+
+// NOVO: Função para salvar e atualizar a média de um trimestre
+function handleHistoricalGradeChange(inputElement, trimestreIndex) {
+    const aluno = listaDeAlunos[indiceAtual];
+    let novoValor = parseFloat(inputElement.value);
+
+    // Validação de 0 a 10
+    if (novoValor > 10) novoValor = 10;
+    if (novoValor < 0) novoValor = 0;
+    
+    // Atualiza o input (caso tenha sido corrigido)
+    inputElement.value = novoValor;
+
+    // Atualiza o array no objeto do aluno
+    if (aluno.historicoMedia[trimestreIndex] !== undefined) {
+        aluno.historicoMedia[trimestreIndex] = novoValor;
+    } else {
+        // Se o array tiver menos que 3 posições, adiciona a nota
+        aluno.historicoMedia[trimestreIndex] = novoValor;
+    }
+
+    // Atualiza o Gráfico de Linha imediatamente
+    atualizarGraficoLinha(aluno.historicoMedia);
+}
+
+// NOVO: Adiciona Event Listeners aos inputs de Trimestre
+gradeTrim1Input.addEventListener('change', () => handleHistoricalGradeChange(gradeTrim1Input, 0));
+gradeTrim2Input.addEventListener('change', () => handleHistoricalGradeChange(gradeTrim2Input, 1));
+gradeTrim3Input.addEventListener('change', () => handleHistoricalGradeChange(gradeTrim3Input, 2));
+
+
+// Event Listeners para Nome do Aluno
+nomeAlunoElemento.addEventListener('blur', () => {
+    let novoNome = nomeAlunoElemento.textContent.trim();
+    if (novoNome) {
+        listaDeAlunos[indiceAtual].nome = novoNome;
+    } else {
+        // Se o nome for apagado, impede que fique vazio
+        nomeAlunoElemento.textContent = listaDeAlunos[indiceAtual].nome; 
+    }
+});
+nomeAlunoElemento.addEventListener('keydown', (evento) => {
+    // Salva ao pressionar Enter (e previne a quebra de linha)
+    if (evento.key === 'Enter') {
+        evento.preventDefault();
+        nomeAlunoElemento.blur(); 
+    }
+});
 
 // Placeholder funcional para as anotações
 if (!anotacoesElemento.textContent.trim()) {
@@ -319,6 +430,27 @@ anotacoesElemento.addEventListener('keydown', (evento) => {
     if (evento.key === 'Enter') {
         evento.preventDefault();
         anotacoesElemento.blur(); 
+    }
+});
+
+// Event Listeners para Alerta
+if (!alertaElemento.textContent.trim()) {
+    alertaElemento.textContent = '';
+}
+alertaElemento.addEventListener('blur', () => {
+    // Salva o texto do alerta
+    if (!alertaElemento.textContent.trim()) {
+        alertaElemento.textContent = '';
+    }
+    listaDeAlunos[indiceAtual].alerta = alertaElemento.textContent.trim();
+    
+    // Força a re-renderização para que o CSS do alerta seja atualizado
+    renderizarAluno(indiceAtual); 
+});
+alertaElemento.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Enter') {
+        evento.preventDefault();
+        alertaElemento.blur(); // Salva e sai do modo edição
     }
 });
 
@@ -356,7 +488,6 @@ feedbackElemento.addEventListener('keydown', (evento) => {
     }
 });
 
-
 // Botões de navegação
 document.getElementById('prev').addEventListener('click', () => {
     indiceAtual = (indiceAtual - 1 + listaDeAlunos.length) % listaDeAlunos.length;
@@ -386,23 +517,6 @@ faltasInputElemento.addEventListener('change', () => {
     atualizarGraficoRosca(alunoAtual.frequencia);
 });
 
-//Event Listeners para o Nome do Aluno
-nomeAlunoElemento.addEventListener('blur', () => {
-    let novoNome = nomeAlunoElemento.textContent.trim();
-    if (novoNome) {
-        listaDeAlunos[indiceAtual].nome = novoNome;
-    } else {
-        // Se o nome for apagado, impede que fique vazio
-        nomeAlunoElemento.textContent = listaDeAlunos[indiceAtual].nome; 
-    }
-});
-nomeAlunoElemento.addEventListener('keydown', (evento) => {
-    // Salva ao pressionar Enter (e previne a quebra de linha)
-    if (evento.key === 'Enter') {
-        evento.preventDefault();
-        nomeAlunoElemento.blur(); 
-    }
-});
 
 // Inicializa o Chart.js e exibe o primeiro aluno
 inicializarGraficos();

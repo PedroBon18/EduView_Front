@@ -21,7 +21,7 @@ body {
   border: 2px solid #64ffda; /* Borda "glowing" ciano */
   border-radius: 12px;
   padding: 20px;
-  width: 96%; /* ATUALIZADO: Ocupa quase toda a largura da tela */
+  width: 96%; /* Ocupa quase toda a largura da tela */
   /* max-width: 1000px; <-- REMOVIDO para permitir tela cheia */
   box-shadow: 0 0 20px rgba(100, 255, 218, 0.3); /* Sombra "glowing" */
 }
@@ -34,12 +34,30 @@ body {
 
 /* --- Painel Central --- */
 .panel-center {
-  flex-direction: row; /* Alinha botões e foto horizontalmente */
-  justify-content: center;
+  flex-direction: column; /* CORRIGIDO: Empilha verticalmente (Gráfico, Nav-Row, Inputs) */
+  justify-content: flex-start; /* CORRIGIDO: Alinha os itens ao topo do painel */
   align-items: center;
   border-left: 2px solid #1e3c72; /* Divisórias */
   border-right: 2px solid #1e3c72;
   padding: 0 15px;
+  gap: 15px; /* Adiciona espaçamento entre os elementos empilhados */
+}
+
+/* NOVO: Estilo para o Contêiner do Gráfico de Linha na Coluna Central */
+.line-chart-container {
+    width: 90%; 
+    height: 300px; 
+    margin-top: 5px; 
+    /* Estilos do .chart-placeholder já são aplicados */
+}
+
+/* NOVO: Linha de navegação (para manter botões e foto na mesma linha) */
+.nav-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .photo-frame {
@@ -50,7 +68,7 @@ body {
     25% 93.3%, 0% 50%
   );
   padding: 5px; /* Espaçamento para a borda */
-  margin: 0 15px;
+  margin: 0 15px; /* Margem entre botões e foto */
 }
 
 .photo {
@@ -269,6 +287,41 @@ h1#studentName:focus {
   font-size: 16px;
 }
 
+/* NOVO: Estilos para a Edição de Notas Históricas */
+.historical-grades-input {
+    width: 90%;
+    padding: 10px;
+    border: 1px dashed #495c80;
+    border-radius: 6px;
+    background: #0e2038;
+    text-align: center;
+    margin-bottom: 5px; 
+}
+
+.historical-grades-input h4 {
+    margin: 0 0 10px 0;
+    color: #ccd6f6;
+}
+
+.historical-grades-input .grades-row {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.historical-input {
+    width: 50px;
+    padding: 3px;
+    margin-left: 5px;
+    border: 1px solid #64ffda;
+    background: #112240;
+    color: #a8b2d1;
+    border-radius: 4px;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace; 
+}
+
 /* --- Media Queries para Responsividade --- */
 
 @media (max-width: 1000px) {
@@ -289,6 +342,24 @@ h1#studentName:focus {
     border-top: 2px solid #1e3c72;
     border-bottom: 2px solid #1e3c72;
     padding: 20px 15px; 
+    
+    /* Layout Vertical para Mobile */
+    flex-direction: column; 
+    justify-content: flex-start; /* Alinha ao topo em tablets */
+    gap: 10px; 
+  }
+  .line-chart-container {
+    height: 250px;
+    order: -1; /* Força a ir para o topo do painel central */
+    margin-bottom: 20px;
+  }
+  .nav-row {
+    order: 1;
+    margin-bottom: 0;
+  }
+
+  .historical-grades-input .grades-row {
+      flex-direction: column; /* Empilha inputs em telas pequenas */
   }
 }
 
