@@ -21,8 +21,8 @@ body {
   border: 2px solid #64ffda; /* Borda "glowing" ciano */
   border-radius: 12px;
   padding: 20px;
-  width: 90%;
-  max-width: 1000px;
+  width: 96%; /* ATUALIZADO: Ocupa quase toda a largura da tela */
+  /* max-width: 1000px; <-- REMOVIDO para permitir tela cheia */
   box-shadow: 0 0 20px rgba(100, 255, 218, 0.3); /* Sombra "glowing" */
 }
 
@@ -65,7 +65,7 @@ body {
   );
 }
 
-/* Imagens */
+/* Imagens (Corretas) */
 .photo.Aluno1 { background-image: url('img/Pedro.jpg'); }
 .photo.Aluno2 { background-image: url('img/aranha.jpg'); }
 .photo.Aluno3 { background-image: url('img/avatar_steam.jpg'); }
@@ -93,17 +93,12 @@ body {
 }
 
 h1#studentName {
-    /* Mantém o estilo base */
-    font-size: 28px;
-    color: #ccd6f6;
-    margin: 10px 0 5px;
-    
-    /* Adiciona indicação de que é editável */
-    cursor: pointer;
+  font-size: 28px;
+  color: #ccd6f6;
+  margin: 10px 0 5px;
+  cursor: pointer;
 }
-
 h1#studentName:focus {
-    /* Destaca a borda ao editar */
     outline: 1px dashed #64ffda;
     background: rgba(100, 255, 218, 0.05);
     padding: 0 5px;
@@ -172,6 +167,7 @@ h1#studentName:focus {
   pointer-events: none;
 }
 
+/* Estilo para o Bloco de Alerta */
 #studentAlert {
   width: 90%;
   padding: 10px;
@@ -179,31 +175,25 @@ h1#studentName:focus {
   border-radius: 6px;
   text-align: center;
   font-weight: bold;
-  
-  /* REMOVEMOS: display: none; */ 
-  
-  /* Estilo de Alerta (Amarelo/Laranja) */
+  /* display: none; <-- REMOVIDO */
   border: 1px solid #f9ff4d; 
   color: #f9ff4d;
   background: rgba(249, 255, 77, 0.1);
 }
 
-/* NOVO: Classe para esconder o Alerta quando estiver vazio (e não focado) */
+/* Classe para esconder o Alerta quando estiver vazio (e não focado) */
 .alert-box:empty:not(:focus) {
-    /* Remove a borda e o fundo para ficar visualmente limpo */
     border: 1px dashed transparent;
     background: transparent;
     color: #a8b2d1;
     text-align: left;
 }
 .alert-box:empty:not(:focus):before {
-    /* Faz o placeholder do Alerta se parecer com o das Anotações */
     content: attr(data-placeholder);
     color: #5a73a8;
     text-align: left;
 }
 .alert-box:empty:not(:focus):hover {
-    /* Dica visual de que é editável */
     border: 1px dashed #495c80;
 }
 
@@ -302,7 +292,6 @@ h1#studentName:focus {
   }
 }
 
-/* Responsividade */
 @media (max-width: 600px) {
   h1#studentName {
     font-size: 24px;
@@ -330,4 +319,28 @@ h1#studentName:focus {
   .editable-box {
     min-height: 40px;
   }
+}
+
+/* --- Media Queries para Controle de Zoom (Escala) --- */
+
+/* Escala Padrão para Notebooks Comuns (90% - Telas entre 1001px e 1440px) */
+@media (min-width: 1001px) and (max-width: 1440px) {
+    body {
+        transform: scale(0.9);
+        transform-origin: top center; 
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+    }
+}
+
+/* Escala para Desktops Grandes/Ultra-Wide (70% - Telas > 1440px) */
+@media (min-width: 1441px) {
+    body {
+        transform: scale(0.7);
+        transform-origin: top center; 
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+    }
 }
