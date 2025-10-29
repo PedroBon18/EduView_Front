@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
 </head>
@@ -24,12 +25,7 @@
       </div>
       <ul id="gradesList"></ul>
 
-      <div class="frequency-controls">
-        <h3>Frequência</h3>
-        <label for="studentAbsencesInput">Nº de Faltas:</label>
-        <input type="number" id="studentAbsencesInput" min="0">
       </div>
-    </div>
 
     <div class="panel panel-center">
       <button id="prev" class="nav-button">&lt;</button>
@@ -40,7 +36,7 @@
     </div>
 
     <div class="panel panel-right">
-      <h1 id="studentName"></h1>
+      <h1 id="studentName" contenteditable="true"></h1> 
       <div class="student-id-large">
         <span id="studentID"></span>
       </div>
@@ -52,10 +48,10 @@
       </div>
 
       <h3>Anotações</h3>
-      <div id="notes" contenteditable="true" data-placeholder="Digite sobre o aluno"></div>
-      
+      <div id="notes" class="editable-box" contenteditable="true" data-placeholder="Digite sobre o aluno"></div>
+
       <h3>Alerta</h3>
-      <div id="studentAlert"></div>
+      <div id="studentAlert" class="editable-box alert-box" contenteditable="true" data-placeholder="Adicionar Alerta Rápido..."></div>
 
       <h3>Metas</h3>
       <div id="studentGoals" class="editable-box" contenteditable="true" data-placeholder="Defina metas para o aluno..."></div>
@@ -63,9 +59,13 @@
       <h3>Feedback</h3>
       <div id="studentFeedback" class="editable-box" contenteditable="true" data-placeholder="Registre o último feedback..."></div>
 
-    </div>
-    
+      <div class="frequency-controls">
+        <h3>Frequência</h3>
+        <label for="studentAbsencesInput">Nº de Faltas:</label>
+        <input type="number" id="studentAbsencesInput" min="0">
       </div>
+
+    </div>
 
   </div>
   <script src="main.js"></script>

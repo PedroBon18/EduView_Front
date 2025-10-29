@@ -71,7 +71,6 @@ const anotacoesElemento = document.getElementById('notes');
 const fotoElemento = document.getElementById('photo');
 const mediaBarElemento = document.getElementById('studentAverageBar');
 const faltasInputElemento = document.getElementById('studentAbsencesInput');
-// NOVOS Seletores
 const metasElemento = document.getElementById('studentGoals');
 const feedbackElemento = document.getElementById('studentFeedback');
 const alertaElemento = document.getElementById('studentAlert');
@@ -217,9 +216,11 @@ function atualizarMedia(aluno) {
     atualizarGraficoRadar(aluno.notas);
 }
 
-// Função para renderizar o aluno atual (ATUALIZADA)
+// Função para renderizar o aluno atual
 function renderizarAluno(indice) {
     const aluno = listaDeAlunos[indice];
+    
+    // O nome é populado aqui (e agora é editável)
     nomeAlunoElemento.textContent = aluno.nome;
     matriculaAlunoElemento.textContent = aluno.matricula;
     listaNotasElemento.innerHTML = ''; 
@@ -269,14 +270,32 @@ function renderizarAluno(indice) {
     metasElemento.textContent = aluno.metas || '';
     feedbackElemento.textContent = aluno.feedback || '';
     
+    // ATUALIZADO: Popula o Alerta
+    alertaElemento.textContent = aluno.alerta || ''; 
+    // OBS: O estilo de "display: none" é agora controlado pelo CSS usando a classe alert-box e o :empty.
+    
     // Controla a exibição do Alerta
-    if (aluno.alerta) {
-        alertaElemento.textContent = aluno.alerta;
-        alertaElemento.style.display = 'block'; // Mostra o alerta
-    } else {
+    // Event Listeners para Alerta
+if (!alertaElemento.textContent.trim()) {
+    alertaElemento.textContent = '';
+}
+alertaElemento.addEventListener('blur', () => {
+    // Salva o texto do alerta
+    if (!alertaElemento.textContent.trim()) {
         alertaElemento.textContent = '';
-        alertaElemento.style.display = 'none'; // Oculta o alerta
     }
+    listaDeAlunos[indiceAtual].alerta = alertaElemento.textContent.trim();
+    
+    // Quando o usuário sai do campo, forçamos a re-renderização
+    // Isso garante que o CSS .alert-box:empty:not(:focus) seja ativado/desativado corretamente.
+    renderizarAluno(indiceAtual); 
+});
+alertaElemento.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Enter') {
+        evento.preventDefault();
+        alertaElemento.blur(); // Salva e sai do modo edição
+    }
+});
     
     // Calcula e exibe a média e a barra
     atualizarMedia(aluno); 
@@ -303,7 +322,7 @@ anotacoesElemento.addEventListener('keydown', (evento) => {
     }
 });
 
-// NOVO: Event Listeners para Metas
+// Event Listeners para Metas
 if (!metasElemento.textContent.trim()) {
     metasElemento.textContent = '';
 }
@@ -320,7 +339,7 @@ metasElemento.addEventListener('keydown', (evento) => {
     }
 });
 
-// NOVO: Event Listeners para Feedback
+// Event Listeners para Feedback
 if (!feedbackElemento.textContent.trim()) {
     feedbackElemento.textContent = '';
 }
@@ -367,6 +386,23 @@ faltasInputElemento.addEventListener('change', () => {
     atualizarGraficoRosca(alunoAtual.frequencia);
 });
 
+//Event Listeners para o Nome do Aluno
+nomeAlunoElemento.addEventListener('blur', () => {
+    let novoNome = nomeAlunoElemento.textContent.trim();
+    if (novoNome) {
+        listaDeAlunos[indiceAtual].nome = novoNome;
+    } else {
+        // Se o nome for apagado, impede que fique vazio
+        nomeAlunoElemento.textContent = listaDeAlunos[indiceAtual].nome; 
+    }
+});
+nomeAlunoElemento.addEventListener('keydown', (evento) => {
+    // Salva ao pressionar Enter (e previne a quebra de linha)
+    if (evento.key === 'Enter') {
+        evento.preventDefault();
+        nomeAlunoElemento.blur(); 
+    }
+});
 
 // Inicializa o Chart.js e exibe o primeiro aluno
 inicializarGraficos();

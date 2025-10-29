@@ -44,7 +44,6 @@ body {
 
 .photo-frame {
   border: 3px solid #64ffda; /* Borda do hexágono */
-  /* O clip-path cria o hexágono */
   clip-path: polygon(
     25% 6.7%, 75% 6.7%, 
     100% 50%, 75% 93.3%, 
@@ -66,7 +65,7 @@ body {
   );
 }
 
-/* Imagens (inalterado) */
+/* Imagens */
 .photo.Aluno1 { background-image: url('img/Pedro.jpg'); }
 .photo.Aluno2 { background-image: url('img/aranha.jpg'); }
 .photo.Aluno3 { background-image: url('img/avatar_steam.jpg'); }
@@ -94,13 +93,24 @@ body {
 }
 
 h1#studentName {
-  font-size: 28px;
-  color: #ccd6f6;
-  margin: 10px 0 5px;
+    /* Mantém o estilo base */
+    font-size: 28px;
+    color: #ccd6f6;
+    margin: 10px 0 5px;
+    
+    /* Adiciona indicação de que é editável */
+    cursor: pointer;
+}
+
+h1#studentName:focus {
+    /* Destaca a borda ao editar */
+    outline: 1px dashed #64ffda;
+    background: rgba(100, 255, 218, 0.05);
+    padding: 0 5px;
 }
 
 .student-id-large {
-  font-size: 72px; /* ID gigante, como o "03" da imagem */
+  font-size: 72px; /* ID gigante */
   font-weight: bold;
   color: #64ffda; /* Cor destaque */
   margin: 10px 0;
@@ -115,11 +125,10 @@ h1#studentName {
   height: 25px;
   position: relative;
   margin: 10px auto;
-  overflow: hidden; /* Garante que a barra interna fique contida */
+  overflow: hidden; 
 }
 .average-bar {
   height: 100%;
-  /* Gradiente Verde -> Amarelo -> Vermelho */
   background: linear-gradient(90deg, #ff4d4d 0%, #f9ff4d 50%, #4dff4d 100%);
   border-radius: 4px;
   transition: width 0.5s ease;
@@ -127,17 +136,15 @@ h1#studentName {
 }
 #studentAverage {
   position: absolute;
-  left: 50%; /* Centraliza o texto da média */
+  left: 50%; 
   top: 50%;
   transform: translate(-50%, -50%);
   color: #fff;
   font-size: 14px;
-  /* Faz o texto inverter a cor do fundo */
   mix-blend-mode: difference; 
 }
 
 /* Anotações, Metas e Feedback (Tema Escuro) */
-/* ATUALIZADO: Usando classe .editable-box em vez de #notes */
 .editable-box {
   background: #0e2038;
   border: 1px dashed #495c80;
@@ -165,7 +172,6 @@ h1#studentName {
   pointer-events: none;
 }
 
-/* NOVO: Estilo para o Bloco de Alerta */
 #studentAlert {
   width: 90%;
   padding: 10px;
@@ -174,8 +180,7 @@ h1#studentName {
   text-align: center;
   font-weight: bold;
   
-  /* Estilo padrão (oculto) */
-  display: none; 
+  /* REMOVEMOS: display: none; */ 
   
   /* Estilo de Alerta (Amarelo/Laranja) */
   border: 1px solid #f9ff4d; 
@@ -183,9 +188,45 @@ h1#studentName {
   background: rgba(249, 255, 77, 0.1);
 }
 
-/* Lista de notas (agora visível e estilizada para edição) */
+/* NOVO: Classe para esconder o Alerta quando estiver vazio (e não focado) */
+.alert-box:empty:not(:focus) {
+    /* Remove a borda e o fundo para ficar visualmente limpo */
+    border: 1px dashed transparent;
+    background: transparent;
+    color: #a8b2d1;
+    text-align: left;
+}
+.alert-box:empty:not(:focus):before {
+    /* Faz o placeholder do Alerta se parecer com o das Anotações */
+    content: attr(data-placeholder);
+    color: #5a73a8;
+    text-align: left;
+}
+.alert-box:empty:not(:focus):hover {
+    /* Dica visual de que é editável */
+    border: 1px dashed #495c80;
+}
+
+/* --- Painel Esquerdo --- */
+.chart-placeholder {
+  border: 2px dashed #495c80;
+  border-radius: 8px;
+  padding: 10px; 
+  text-align: center;
+  margin: 10px 0;
+  width: 90%; 
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #495c80;
+}
+.chart-placeholder canvas {
+    max-height: 100%; 
+}
+
+/* Lista de notas */
 #gradesList {
-  /* display: none; */ /* LINHA ORIGINAL COMENTADA/REMOVIDA */
   list-style: none; 
   padding: 0;
   margin-top: 20px;
@@ -210,35 +251,6 @@ h1#studentName {
     text-align: center;
 }
 
-
-/* Anotações (Tema Escuro) */
-#notes {
-  background: #0e2038;
-  border: 1px dashed #495c80;
-  padding: 10px;
-  border-radius: 6px;
-  min-height: 60px;
-  cursor: text;
-  transition: background 0.3s, border 0.3s;
-  text-align: left;
-  width: 90%;
-  margin: 0 auto 20px;
-  outline: none;
-  white-space: pre-wrap;
-  color: #a8b2d1;
-}
-
-#notes:focus {
-  background: #112240;
-  border: 1px solid #64ffda;
-}
-
-#notes:empty:before {
-  content: attr(data-placeholder);
-  color: #5a73a8;
-  pointer-events: none;
-}
-
 /*Estilos para o controle de Faltas */
 .frequency-controls {
   width: 90%;
@@ -247,7 +259,7 @@ h1#studentName {
 }
 
 .frequency-controls h3 {
-  margin-top: 5px; /* Ajuste para separar das anotações */
+  margin-top: 5px; 
 }
 
 .frequency-controls label {
@@ -255,7 +267,6 @@ h1#studentName {
   font-size: 14px;
 }
 
-/* Reutiliza o estilo do .grade-input para o input de faltas */
 #studentAbsencesInput {
   width: 70px;
   padding: 5px;
@@ -264,6 +275,59 @@ h1#studentName {
   color: #a8b2d1;
   border-radius: 4px;
   text-align: center;
-  font-family: 'Share Tech Mono', monospace; /* Garante a fonte */
+  font-family: 'Share Tech Mono', monospace; 
   font-size: 16px;
+}
+
+/* --- Media Queries para Responsividade --- */
+
+@media (max-width: 1000px) {
+  body {
+    height: auto; 
+    min-height: 100vh;
+    padding: 20px 0; 
+    display: block; 
+  }
+  .container {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    width: 90%;
+  }
+  .panel-center {
+    border-left: none;
+    border-right: none;
+    border-top: 2px solid #1e3c72;
+    border-bottom: 2px solid #1e3c72;
+    padding: 20px 15px; 
+  }
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  h1#studentName {
+    font-size: 24px;
+  }
+  .student-id-large {
+    font-size: 56px; 
+  }
+  .photo-frame,
+  .photo {
+    width: 120px;
+    height: 120px;
+  }
+  .nav-button {
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+  }
+  .chart-placeholder {
+    height: 200px; 
+  }
+  .grade-input,
+  #studentAbsencesInput {
+    width: 50px;
+  }
+  .editable-box {
+    min-height: 40px;
+  }
 }
