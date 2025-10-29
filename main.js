@@ -17,11 +17,11 @@ const listaDeAlunos = [
     },
     frequencia: { faltas: 10, totalAulas: 200 },
     anotacao: '',
-    metas: 'Melhorar a nota de Inglês para 8.0.',
-    feedback: 'Conversado com o aluno em 10/10 sobre o progresso.',
+    metas: '',
+    feedback: '',
     alerta: '', 
     classeFoto: 'Aluno1',
-    historicoMedia: [8.0, 7.8, 8.5] // NOVO
+    historicoMedia: [8.0, 7.8, 8.5] 
   },
   {
     nome: 'Aluno 2',
@@ -56,14 +56,32 @@ const listaDeAlunos = [
       'Ciências': 9.8
     },
     frequencia: { faltas: 2, totalAulas: 200 },
-    anotacao: 'Excelente participação.',
-    metas: 'Manter a média acima de 9.0.',
-    feedback: 'Parabenizado pelo desempenho em Ciências.',
+    anotacao: '',
+    metas: '',
+    feedback: '',
     alerta: '',
     classeFoto: 'Aluno3',
     historicoMedia: [8.5, 9.2, 9.1] // NOVO
   },
+  // NOVO: ALUNO PLACEHOLDER ESTÁTICO (CLICÁVEL)
+  {
+    nome: 'Adicionar Aluno',
+    matricula: '????',
+    media: 0, 
+    notas: { 
+      'Matemática': 0, 'Português': 0, 'História': 0, 
+      'Geografia': 0, 'Inglês': 0, 'Ciências': 0 
+    },
+    frequencia: { faltas: 0, totalAulas: 200 },
+    anotacao: 'Use o hexágono central para adicionar um novo registro.',
+    metas: 'Novo registro. Preencha os dados.',
+    feedback: 'Nenhum feedback registrado.',
+    alerta: 'Aguardando novo aluno.',
+    classeFoto: 'AlunoPlaceholder', // Nova classe para o placeholder
+    historicoMedia: [0, 0, 0] 
+  },
 ];
+
 
 
 let indiceAtual = 0;

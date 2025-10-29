@@ -89,6 +89,7 @@ body {
 .photo.Aluno1 { background-image: url('img/Pedro.jpg'); }
 .photo.Aluno2 { background-image: url('img/aranha.jpg'); }
 .photo.Aluno3 { background-image: url('img/avatar_steam.jpg'); }
+.photo.AlunoPlaceholder {background-image: url('img/ADD_ALUNO.png');}
 
 /* NOVO: Estilização do Rank */
 #studentRank {
