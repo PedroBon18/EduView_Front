@@ -10,7 +10,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh; /* Garante que o body ocupa a altura total */
+  height: 100vh; /* Mantém a regra original para compatibilidade visual */
+  overflow-x: hidden; /* NOVO: Previne rolagem horizontal */
 }
 
 .container {
@@ -19,11 +21,11 @@ body {
   gap: 20px;
   background: #112240; /* Fundo do painel */
   border: 2px solid #64ffda; /* Borda "glowing" ciano */
-  border-radius: 12px;
-  padding: 20px;
-  width: 96%; /* Ocupa quase toda a largura da tela */
-  /* max-width: 1000px; <-- REMOVIDO para permitir tela cheia */
-  box-shadow: 0 0 20px rgba(100, 255, 218, 0.3); /* Sombra "glowing" */
+  border-radius: 0; /* CORRIGIDO: Remove o arredondamento para preencher os cantos */
+  padding: 20px; 
+  width: 100%; /* CORRIGIDO: Ocupa 100% da largura do body */
+  max-width: none; /* CORRIGIDO: Remove limitação de largura */
+  box-shadow: none; /* CORRIGIDO: Remove sombra */
 }
 
 .panel {
@@ -34,8 +36,8 @@ body {
 
 /* --- Painel Central --- */
 .panel-center {
-  flex-direction: column; /* CORRIGIDO: Empilha verticalmente (Gráfico, Nav-Row, Inputs) */
-  justify-content: flex-start; /* CORRIGIDO: Alinha os itens ao topo do painel */
+  flex-direction: column; /* Empilha verticalmente (Gráfico, Nav-Row, Inputs) */
+  justify-content: flex-start; /* Alinha os itens ao topo do painel */
   align-items: center;
   border-left: 2px solid #1e3c72; /* Divisórias */
   border-right: 2px solid #1e3c72;
@@ -335,6 +337,8 @@ h1#studentName:focus {
     grid-template-columns: 1fr;
     max-width: 600px;
     width: 90%;
+    border-radius: 12px; /* Reintroduz o arredondamento em telas pequenas */
+    box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
   }
   .panel-center {
     border-left: none;
@@ -405,10 +409,10 @@ h1#studentName:focus {
     }
 }
 
-/* Escala para Desktops Grandes/Ultra-Wide (70% - Telas > 1440px) */
+/* Escala para Desktops Grandes/Ultra-Wide (90% - Telas > 1440px) */
 @media (min-width: 1441px) {
     body {
-        transform: scale(0.7);
+        transform: scale(0.9); /* ATUALIZADO para 90% */
         transform-origin: top center; 
         width: 100%;
         height: 100%;
